@@ -17,7 +17,6 @@ const BlogSchema = new Schema(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
     },
     coverImage: {
@@ -37,20 +36,19 @@ const BlogSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Create slug from title
-BlogSchema.pre("save", function (next) {
-  if (this.isModified("title")) {
-    this.slug = this.title
-      .toLowerCase()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-      .trim();
-  }
-  next();
+BlogSchema.pre("save", function () {
+  if (!this.isModified("title")) return;
+
+  this.slug = this.title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .trim();
 });
 
 export default model("Blog", BlogSchema);

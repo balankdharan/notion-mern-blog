@@ -6,8 +6,10 @@ export const getAllBlogs = async (req, res) => {
     const blogs = await Blog.find({ isPublished: true })
       .populate("author", "name avatar")
       .sort({ createdAt: -1 });
+
     res.json(blogs);
   } catch (err) {
+    console.logs("err", err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -18,7 +20,7 @@ export const getSingleBlog = async (req, res) => {
     const blog = await Blog.findOneAndUpdate(
       { slug: req.params.slug, isPublished: true },
       { $inc: { views: 1 } },
-      { new: true }
+      { new: true },
     ).populate("author", "name avatar");
 
     if (!blog) return res.status(404).json({ message: "Blog not found" });

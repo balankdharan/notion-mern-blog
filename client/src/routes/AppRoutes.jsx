@@ -6,6 +6,7 @@ import CreateBlog from "../pages/CreateBlog";
 import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import SingleBlog from "../pages/SingleBlog";
+import EditBlog from "../pages/EditBlog";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useEffect } from "react";
@@ -32,6 +33,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/blog/:id" element={<SingleBlog />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
@@ -41,6 +43,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CreateBlog />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/blog/edit/:id"
+        element={
+          <ProtectedRoute>
+            <EditBlog />
           </ProtectedRoute>
         }
       />

@@ -77,7 +77,7 @@ const Home = () => {
       <Navbar user={user} onLogout={handleLogout} />
 
       {/* Hero Section */}
-      <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white">
+      <div className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Welcome to BlogSpace
@@ -134,7 +134,7 @@ const Home = () => {
 
                 <div className="p-6">
                   {/* Blog Title */}
-                  <Link to={`/blog/${blog.slug || blog._id}`}>
+                  <Link to={`/blog/${blog._id}`}>
                     <h2 className="text-xl font-bold text-gray-900 mb-3 hover:text-blue-600 transition-colors line-clamp-2">
                       {blog.title}
                     </h2>
@@ -178,7 +178,7 @@ const Home = () => {
                     {user && user.id === blog.author?._id && (
                       <div className="flex items-center space-x-2">
                         <Link
-                          to={`/edit/${blog._id}`}
+                          to={`/blog/edit/${blog._id}`}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Edit"
                         >

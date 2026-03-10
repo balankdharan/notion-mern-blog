@@ -1,4 +1,5 @@
 import Blog from "../models/blogModel.js";
+import mongoose from "mongoose";
 
 // Get all published blogs (public)
 export const getAllBlogs = async (req, res) => {
@@ -19,6 +20,21 @@ export const getSingleBlog = async (req, res) => {
   try {
     const blog = await Blog.findOneAndUpdate(
       { slug: req.params.slug, isPublished: true },
+      { $inc: { views: 1 } },
+      { new: true },
+    ).populate("author", "name avatar");
+
+    if (!blog) return res.status(404).json({ message: "Blog not found" });
+    res.json(blog);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export const getSingleBlogById = async (req, res) => {
+  try {
+    const blog = await Blog.findOneAndUpdate(
+      { _id: new mongoose.Types.ObjectId(req.params.id), isPublished: true },
       { $inc: { views: 1 } },
       { new: true },
     ).populate("author", "name avatar");
@@ -62,7 +78,10 @@ export const updateBlog = async (req, res) => {
     const blog = await Blog.findOne({ _id: req.params.id, author: req.userId });
     if (!blog) return res.status(404).json({ message: "Blog not found" });
 
+    console.log("req.body", req.body);
     Object.assign(blog, req.body);
+    console.log("blog", blog);
+
     await blog.save();
     res.json(blog);
   } catch (err) {

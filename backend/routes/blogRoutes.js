@@ -5,6 +5,7 @@ import auth from "../middleware/auth.js";
 import {
   getAllBlogs,
   getSingleBlog,
+  getSingleBlogById,
   getAllBlogsOfUser,
   createBlog,
   updateBlog,
@@ -16,6 +17,9 @@ router.get("/public", getAllBlogs);
 
 // Get single blog by slug (public)
 router.get("/public/:slug", getSingleBlog);
+
+// Get single blog by id (public)
+router.get("/public-blog/:id", getSingleBlogById);
 
 // Get all blogs by authenticated user
 router.get("/my-blogs", auth, getAllBlogsOfUser);

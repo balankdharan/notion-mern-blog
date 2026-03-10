@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+import { useEffect } from "react";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -7,6 +9,7 @@ import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import { LinkPlugin } from "@lexical/react/LexicalLinkPlugin";
 import { MarkdownShortcutPlugin } from "@lexical/react/LexicalMarkdownShortcutPlugin";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { HeadingNode, QuoteNode } from "@lexical/rich-text";
 import { ListItemNode, ListNode } from "@lexical/list";
 import { CodeNode } from "@lexical/code";
@@ -39,8 +42,35 @@ const theme = {
   link: "text-blue-600 hover:text-blue-700 underline cursor-pointer",
 };
 
-// eslint-disable-next-line no-unused-vars
-export default function LexicalEditor({ value, onChange }) {
+// ── Plugin: loads saved JSON into the editor once on mount ────────────────────
+function LoadInitialContentPlugin({ initialContent }) {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    if (!initialContent) return;
+
+    try {
+      const parsedState = editor.parseEditorState(initialContent);
+      // queueMicrotask keeps it outside of any active editor update
+      queueMicrotask(() => {
+        editor.setEditorState(parsedState);
+      });
+    } catch (e) {
+      console.error("Failed to load initial editor content:", e);
+    }
+    // Only run once when the editor mounts — intentionally no deps on editor
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return null;
+}
+
+// ── Main editor ───────────────────────────────────────────────────────────────
+// Props:
+//   value          — current serialised JSON string (forwarded to parent via onChange)
+//   onChange       — (jsonString: string) => void
+//   initialContent — serialised JSON string to pre-populate (EditBlog use-case)
+export default function LexicalEditor({ value, onChange, initialContent }) {
   const initialConfig = {
     namespace: "NotionLikeEditor",
     theme,
@@ -78,6 +108,10 @@ export default function LexicalEditor({ value, onChange }) {
         <ListPlugin />
         <LinkPlugin />
         <MarkdownShortcutPlugin transformers={TRANSFORMERS} />
+
+        {/* Load saved content when editing an existing blog */}
+        <LoadInitialContentPlugin initialContent={initialContent} />
+
         <OnChangePlugin
           onChange={(editorState) => {
             editorState.read(() => {

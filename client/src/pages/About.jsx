@@ -91,7 +91,7 @@ const About = () => {
       <Navbar user={user} onLogout={handleLogout} />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-linear-to-br from-blue-600 to-purple-700 text-white">
+      <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-size-[32px_32px]" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">

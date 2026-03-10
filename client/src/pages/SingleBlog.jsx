@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
 import lexicalToHtml from "../utils/Helper";
-import { getBlogBySlug, deleteBlog } from "../api/blogApi";
+import { getBlogById, deleteBlog } from "../api/blogApi";
+import { getCurrentUser } from "../utils/Auth";
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -11,13 +12,15 @@ const SingleBlog = () => {
   const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const user = useMemo(() => getCurrentUser(), []);
+
   // 🔒 Replace this with your actual auth check
-  const isAuthUser = true;
+  // const isAuthUser = true;
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const data = await getBlogBySlug(id);
+        const data = await getBlogById(id);
         console.log("data", data);
         setBlog(data.data);
       } catch (err) {
@@ -76,7 +79,7 @@ const SingleBlog = () => {
             </button>
 
             {/* Edit / Delete — only for auth user */}
-            {isAuthUser && (
+            {user && user.id === blog.author?._id && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => navigate(`/blog/edit/${id}`)}

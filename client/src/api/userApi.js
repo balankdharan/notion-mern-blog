@@ -34,3 +34,4 @@ api.interceptors.response.use(
 export const registerUser = (data) => api.post("/auth/register", data);
 export const loginUser = (data) => api.post("/auth/login", data);
 export const getLoggedInUser = () => api.get("/auth/me");
+export const updateUser = () => api.get("/auth/me");

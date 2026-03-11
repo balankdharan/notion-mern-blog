@@ -7,7 +7,9 @@ import Login from "../pages/Login";
 import Signup from "../pages/Signup";
 import SingleBlog from "../pages/SingleBlog";
 import EditBlog from "../pages/EditBlog";
-
+import EditProfile from "../pages/EditProfile";
+import Profile from "../pages/Profile";
+import MyBlog from "../pages/MyBlog";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -43,6 +45,31 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CreateBlog />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/edit-profile"
+        element={
+          <ProtectedRoute>
+            <EditProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/my-blogs"
+        element={
+          <ProtectedRoute>
+            <MyBlog />
           </ProtectedRoute>
         }
       />

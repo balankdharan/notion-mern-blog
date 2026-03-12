@@ -5,6 +5,7 @@ import {
   registerUser,
   loginUser,
   getLoggedInUser,
+  updateUser,
 } from "../controller/authController.js";
 
 // Register
@@ -15,5 +16,7 @@ router.post("/login", loginUser);
 
 // Get current user
 router.get("/me", getLoggedInUser);
+
+router.put("/me", updateUser);
 
 export default router;

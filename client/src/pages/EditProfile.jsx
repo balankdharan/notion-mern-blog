@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Save, ArrowLeft } from "lucide-react";
 import { getLoggedInUser, updateUser } from "../api/userApi";
+import { login } from "../utils/Auth";
 
 const EditProfile = () => {
   const [user, setUser] = useState(null);
@@ -48,7 +49,8 @@ const EditProfile = () => {
       setSaving(true);
       const payload = { name: form.name, email: form.email };
       if (form.password) payload.password = form.password;
-      await updateUser(payload);
+      const response = await updateUser(payload);
+      login(response.data.token, response.data.user);
       setSuccess(true);
       setForm((prev) => ({ ...prev, password: "", confirmPassword: "" }));
     } catch (err) {

@@ -20,7 +20,7 @@ export const registerUser = async (req, res) => {
       process.env.JWT_SECRET || "secret",
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     res.status(201).json({
@@ -52,7 +52,7 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET || "secret",
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     res.json({
@@ -75,5 +75,40 @@ export const getLoggedInUser = async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(401).json({ message: "Invalid token" });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token" });
+
+    const decoded = verify(token, process.env.JWT_SECRET || "secret");
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (password) user.password = password;
+
+    await user.save();
+    const newToken = sign(
+      { userId: user._id },
+      process.env.JWT_SECRET || "secret",
+      {
+        expiresIn: "7d",
+      },
+    );
+
+    res.json({
+      token: newToken,
+      user: { id: user._id, name: user.name, email: user.email },
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

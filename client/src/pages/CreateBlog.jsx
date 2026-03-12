@@ -64,6 +64,7 @@ export default function CreateBlog() {
         content,
         coverImage: finalImageUrl, // ✅ real Supabase URL saved to DB
         excerpt,
+        isPublished: true,
       });
 
       navigate("/");
@@ -76,13 +77,13 @@ export default function CreateBlog() {
     }
   };
 
-  const handleSaveDraft = () => {
-    localStorage.setItem(
-      "blogDraft",
-      JSON.stringify({ title, content, coverImage, excerpt }),
-    );
-    alert("Draft saved!");
-  };
+  // const handleSaveDraft = () => {
+  //   localStorage.setItem(
+  //     "blogDraft",
+  //     JSON.stringify({ title, content, coverImage, excerpt }),
+  //   );
+  //   alert("Draft saved!");
+  // };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -99,12 +100,12 @@ export default function CreateBlog() {
             </button>
 
             <div className="flex items-center gap-3">
-              <button
+              {/* <button
                 onClick={handleSaveDraft}
                 className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium"
               >
                 Save Draft
-              </button>
+              </button> */}
               <button
                 onClick={() => setShowPreview(true)}
                 className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors font-medium"

@@ -17,9 +17,12 @@ const BlogSchema = new Schema(
     },
     slug: {
       type: String,
-      unique: true,
+      // unique: true,
     },
     coverImage: {
+      type: String,
+    },
+    excerpt: {
       type: String,
     },
     isPublished: {

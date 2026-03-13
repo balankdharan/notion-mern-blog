@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { LogIn, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { loginUser } from "../api/userApi";
 import { login } from "../utils/Auth";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,7 +34,8 @@ export default function Login() {
       setIsLoading(false);
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
-      alert(errorMessage);
+      toast.error(errorMessage);
+      navigate("/");
     }
   };
 

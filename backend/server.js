@@ -31,5 +31,20 @@ connect(process.env.MONGODB_URI)
 app.use("/api/auth", authRoutes);
 app.use("/api/blogs", blogRoutes);
 
+// Home route
+app.get("/", (req, res) => {
+  res.json({
+    message: "Welcome to Notion MERN Blog API 🚀",
+    status: "running",
+  });
+});
+
+// 404 - catch all unknown routes
+app.use((req, res) => {
+  res.status(404).json({
+    message: `Route ${req.originalUrl} not found`,
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -15,7 +15,7 @@ import blogRoutes from "./routes/blogRoutes.js";
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://notion-mern-blog.vercel.app"],
     credentials: true,
   }),
 );

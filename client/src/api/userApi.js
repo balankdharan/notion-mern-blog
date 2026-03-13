@@ -18,15 +18,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      // Clear token and user data
+    const isAuthRoute =
+      error.config?.url?.includes("/auth/login") ||
+      error.config?.url?.includes("/auth/register");
+
+    if (error.response?.status === 401 && !isAuthRoute) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-
-      // Redirect to login page
       window.location.href = "/login";
     }
-    return Promise.reject(error);
+
+    return Promise.reject(error); // always reject so catch block runs
   },
 );
 

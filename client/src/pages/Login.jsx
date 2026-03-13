@@ -35,7 +35,6 @@ export default function Login() {
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
-      navigate("/");
     }
   };
 

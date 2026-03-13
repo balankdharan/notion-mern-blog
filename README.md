@@ -86,7 +86,7 @@ JWT_SECRET=your_jwt_secret
 PORT=5000
 ```
 
-Create `client/.env.development`:
+Create `client/.env`:
 
 ```env
 VITE_API_URL=http://localhost:5000/api
@@ -121,7 +121,7 @@ notion-mern-blog/
 │   ├── src/
 │   │   ├── components/
 │   │   ├── pages/
-│   │   └── api.js
+│   │   └── api/
 │   └── index.html
 └── .gitignore
 ```

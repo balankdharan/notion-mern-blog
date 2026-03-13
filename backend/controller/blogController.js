@@ -1,13 +1,18 @@
 import Blog from "../models/blogModel.js";
 import mongoose from "mongoose";
+import { getCache, setCache, deleteCache } from "../utils/cache.js";
+
+const ALL_BLOGS_CACHE_KEY = "blogs:public:all";
 
 // Get all published blogs (public)
 export const getAllBlogs = async (req, res) => {
   try {
+    const cached = getCache(ALL_BLOGS_CACHE_KEY);
+    if (cached) return res.json(cached);
     const blogs = await Blog.find({ isPublished: true })
       .populate("author", "name avatar")
       .sort({ createdAt: -1 });
-
+    setCache(ALL_BLOGS_CACHE_KEY, blogs, 60);
     res.json(blogs);
   } catch (err) {
     console.logs("err", err);
@@ -66,6 +71,7 @@ export const createBlog = async (req, res) => {
       author: req.userId,
     });
     await blog.save();
+    deleteCache(ALL_BLOGS_CACHE_KEY); // bust cache
     res.status(201).json(blog);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -78,11 +84,11 @@ export const updateBlog = async (req, res) => {
     const blog = await Blog.findOne({ _id: req.params.id, author: req.userId });
     if (!blog) return res.status(404).json({ message: "Blog not found" });
 
-    console.log("req.body", req.body);
     Object.assign(blog, req.body);
-    console.log("blog", blog);
 
     await blog.save();
+    deleteCache(ALL_BLOGS_CACHE_KEY);
+
     res.json(blog);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -97,6 +103,7 @@ export const deleteBlog = async (req, res) => {
       author: req.userId,
     });
     if (!blog) return res.status(404).json({ message: "Blog not found" });
+    deleteCache(ALL_BLOGS_CACHE_KEY); // bust cache
     res.json({ message: "Blog deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });

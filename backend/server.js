@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 app.use(json());
 
 // MongoDB Connection
-connect(process.env.MONGODB_URI || "mongodb://localhost:27017/notion-blog")
+connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 

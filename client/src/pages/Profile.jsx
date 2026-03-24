@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { User, Mail, Calendar, BookOpen, Edit } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { User, Mail, Calendar, BookOpen, Edit, ArrowLeft } from "lucide-react";
 import { getLoggedInUser } from "../api/userApi";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const fetchUser = async () => {
     try {
@@ -40,9 +41,18 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Banner — matches Home page style */}
+      {/* Hero Banner */}
       <div className="bg-linear-to-r from-slate-900 via-purple-900 to-slate-900 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2 text-purple-300 hover:text-white transition-colors text-sm font-medium mb-8 group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back
+          </button>
+
           <div className="flex items-center gap-6">
             {/* Avatar */}
             <div className="w-20 h-20 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shrink-0 shadow-lg ring-4 ring-white/10">
